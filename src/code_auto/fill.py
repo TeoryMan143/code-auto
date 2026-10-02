@@ -48,6 +48,8 @@ def parse_args():
         '--submit', action='store_true', help='save the forms instead of taking screenshots'
     )
     for name, default in DEFAULTS.items():
+        if name == 'date':
+            default = datetime.now().date().isoformat()
         parser.add_argument(f'--{name.replace("_", "-")}', default=default)
     return parser.parse_args()
 
