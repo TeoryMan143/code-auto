@@ -1,15 +1,11 @@
 [project]
 name = "code-auto"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "Automation script to submit EL Center codes"
 readme = "README.md"
-authors = [
-    { name = "teoryman143", email = "jonathancortestm143@gmail.com" }
-]
+authors = [{ name = "teoryman143", email = "jonathancortestm143@gmail.com" }]
 requires-python = ">=3.14"
-dependencies = [
-    "playwright>=1.63.0",
-]
+dependencies = ["playwright>=1.63.0"]
 
 [project.scripts]
 code-auto = "code_auto:main"
@@ -21,9 +17,7 @@ requires = ["uv_build>=0.12.18,<0.13.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
-dev = [
-    "ruff>=0.16.10",
-]
+dev = ["ruff>=0.16.10"]
 
 [tool.ruff]
 line-length = 100
@@ -32,15 +26,16 @@ target-version = "py314"
 [tool.ruff.lint]
 
 select = [
-    "E", "W",   # pycodestyle
-    "F",        # pyflakes (unused imports/vars, etc.)
-    "I",        # import sorting
-    "B",        # bugbear (likely bugs)
-    "UP",       # pyupgrade (modern syntax)
-    "SIM",      # simplifications
+    "E",
+    "W",   # pycodestyle
+    "F",   # pyflakes (unused imports/vars, etc.)
+    "I",   # import sorting
+    "B",   # bugbear (likely bugs)
+    "UP",  # pyupgrade (modern syntax)
+    "SIM", # simplifications
 ]
 ignore = [
-    "E501",     # line too long (formatter handles it)
+    "E501", # line too long (formatter handles it)
 ]
 
 [tool.ruff.format]
