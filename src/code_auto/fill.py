@@ -45,6 +45,9 @@ def parse_args():
         description='Fill the Moodle form for every code in resources/codes.csv.'
     )
     parser.add_argument(
+        '--csv', default=CODES_FILE.name, help='CSV filename inside the resources folder'
+    )
+    parser.add_argument(
         '--submit', action='store_true', help='save the forms instead of taking screenshots'
     )
     for name, default in DEFAULTS.items():
@@ -52,6 +55,22 @@ def parse_args():
             default = datetime.now().date().isoformat()
         parser.add_argument(f'--{name.replace("_", "-")}', default=default)
     return parser.parse_args()
+
+
+def get_codes_file(filename):
+    requested = Path(filename)
+    resources = RESOURCES.resolve()
+    if requested.is_absolute():
+        raise ValueError('--csv must be a filename inside the resources folder')
+
+    codes_file = (RESOURCES / requested).resolve()
+    try:
+        codes_file.relative_to(resources)
+    except ValueError as exc:
+        raise ValueError('--csv must point inside the resources folder') from exc
+    if not codes_file.is_file():
+        raise ValueError(f'CSV file not found: {filename}')
+    return codes_file
 
 
 def process(page, e, submit, dialogs):
@@ -116,6 +135,10 @@ def main():
     args = parse_args()
     values = vars(args)
     submit = values.pop('submit')
+    try:
+        codes_file = get_codes_file(values.pop('csv'))
+    except ValueError as exc:
+        sys.exit(str(exc))
     if not AUTH_FILE.exists():
         sys.exit('auth.json not found. Run `uv run login` first.')
 
@@ -145,7 +168,7 @@ def main():
 
         new_file = not RESULTS_FILE.exists()
         with (
-            open(CODES_FILE, newline='', encoding='utf-8-sig') as f,
+            open(codes_file, newline='', encoding='utf-8-sig') as f,
             open(RESULTS_FILE, 'a', newline='', encoding='utf-8') as out,
         ):
             w = csv.writer(out)

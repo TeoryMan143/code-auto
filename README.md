@@ -1,11 +1,13 @@
 ## Fill codes
 
-Put one student code per row in `resources/codes.csv` under the `code` header.
+Put one student code per row in a CSV under the `code` header. By default, the
+command reads `resources/codes.csv`; use `--csv` to choose another CSV inside
+the `resources` folder.
 The form values can be selected when starting the fill command. Any option you
 do not provide keeps the current default. The date defaults to today.
 
 ```powershell
-uv run fill --start 09:00 --end 10:00 
+uv run fill --csv morning-codes.csv --start 09:00 --end 10:00 
 	--course "Professional communication..." 
 	--teacher "TEACHER"
 ```
