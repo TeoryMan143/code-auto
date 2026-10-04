@@ -11,3 +11,4 @@ wheels/
 resources/
 auth.json
 my-scripts.txt
+.ruff-cache/

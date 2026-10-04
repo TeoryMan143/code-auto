@@ -1,6 +1,6 @@
 [project]
 name = "code-auto"
-version = "1.0.0"
+version = "1.1.0"
 description = "Automation script to submit EL Center codes"
 readme = "README.md"
 authors = [{ name = "teoryman143", email = "jonathancortestm143@gmail.com" }]

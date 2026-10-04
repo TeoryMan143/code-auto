@@ -17,6 +17,7 @@ RESULTS_FILE = RESOURCES / 'results.csv'
 AUTH_FILE = Path('auth.json')
 
 EDIT_URL = 'https://www.icesi.edu.co/moodle/mod/data/edit.php?d=27'
+SUPPORT_MODALITY = 'Centro de apoyo'
 
 
 # Used for every row unless the CSV has a column with the same name
@@ -73,6 +74,13 @@ def get_codes_file(filename):
     return codes_file
 
 
+def select_first_option(page, selector):
+    option = page.locator(f'{selector} option:not([value=""])').first
+    value = option.get_attribute('value')
+    if value is not None:
+        page.select_option(selector, value=value)
+
+
 def process(page, e, submit, dialogs):
     dialogs.clear()
     page.goto(EDIT_URL)
@@ -91,11 +99,15 @@ def process(page, e, submit, dialogs):
         raise LookupError(f'not found ({dialogs[-1] if dialogs else "no message"})') from pw
 
     # 2. Fill the form
-    if e['course']:
+    page.select_option('#field_3978', label=e['modality'])
+
+    if e['modality'] == SUPPORT_MODALITY:
+        select_first_option(page, '#field_357')
+    elif e['course']:
         page.select_option('#field_357', label=e['course'], timeout=10_000)
-    if e['other_course']:
+    if e['other_course'] and e['modality'] != SUPPORT_MODALITY:
         page.fill('#field_374', e['other_course'])
-    if e['teacher']:
+    if e['teacher'] and e['modality'] != SUPPORT_MODALITY:
         page.select_option('#field_363', label=e['teacher'], timeout=10_000)
 
     page.select_option('#field_367', label=e['monitor'])
@@ -113,8 +125,6 @@ def process(page, e, submit, dialogs):
 
     if e['comment']:
         page.frame_locator('#field_370_ifr').locator('body').fill(e['comment'])
-
-    page.select_option('#field_3978', label=e['modality'])
 
     # 3. Save
     if not submit:

@@ -21,3 +21,9 @@ uv run fill --start 09:00 --end 10:00 --submit
 
 Run `uv run fill --help` to see all selectable fields, including `--monitor`,
 `--activity`, `--modality`, `--comment`, and the course/teacher options.
+
+When `--modality "Centro de apoyo"` is selected, the first available course is
+selected automatically, if one exists. If there are no courses, the course field
+is left empty. The form then chooses the teacher associated with the course; any
+course or teacher option provided on the command line is ignored for this
+modality.
